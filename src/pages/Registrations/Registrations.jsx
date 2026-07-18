@@ -69,35 +69,40 @@ const Registrations = () => {
         selectedRegistration
       ) {
         await registrationService.update(
-          selectedRegistration.id,
-          data
-        );
+        selectedRegistration.id,
+        {
+          amount: data.amount,
+          payment_status: data.payment_status,
+        }
+      );
+
+      setToast({
+        show: true,
+        message: "Registration updated successfully.",
+        type: "success",
+      });
 
       } else {
         await registrationService.create(
           data
         );
-
+        setToast({
+            show: true,
+            message:
+              'Registration created successfully.',
+            type: 'success',
+        });
       }
-      setToast({
-          show: true,
-          message:
-            'Registration created successfully.',
-          type: 'success',
-      });
-      setShowRegistrationModal(
-        false
-      );
+      setShowRegistrationModal(false);
+      setSelectedRegistration(null);
 
-      setSelectedRegistration(
-        null
-      );
+      
+      
 
       loadRegistrations();
     } catch (error) {
       if (
-        error.response?.status ===
-        422
+        error.response?.status === 422
       ) {
         setErrors(
           error.response.data
@@ -167,7 +172,6 @@ const Registrations = () => {
           message: 'Registration deleted successfully.',
           type: 'success',
       });
-
       loadRegistrations();
     } catch (error) {
       setToast({
@@ -268,7 +272,7 @@ const Registrations = () => {
       </div>
       {/* Basic Bootstrap Table */}
       <div className="card">
-        <h5 className="card-header">Table Basic</h5>
+        <h5 className="card-header">Registrations</h5>
         <div className="table-responsive text-nowrap">
           <table className="table">
             <thead>
@@ -356,6 +360,11 @@ const Registrations = () => {
                         <Permission permission="registration.edit">
                           <button
                             className="btn btn-sm btn-outline-primary"
+                            onClick={() => {
+                              setErrors({});
+                              setSelectedRegistration(registration);
+                              setShowRegistrationModal(true);
+                            }}
                           >
                             <i className="bx bx-edit"></i>
                           </button>
@@ -364,6 +373,10 @@ const Registrations = () => {
                         <Permission permission="registration.delete">
                           <button
                             className="btn btn-sm btn-outline-danger"
+                            onClick={() => {
+                              setSelectedRegistration(registration);
+                              setShowDeleteModal(true);
+                            }}
                           >
                             <i className="bx bx-trash"></i>
                           </button>
@@ -440,14 +453,16 @@ const Registrations = () => {
           selectedRegistration
         }
         errors={errors}
-        onClose={() =>
-          setShowRegistrationModal(false)
-        }
+        onClose={() => {
+          setShowRegistrationModal(false);
+          setSelectedRegistration(null);
+        }}
         onSubmit={saveRegistration}
       />
 
       <PaymentModal
         show={showPaymentModal}
+        errors={errors}
         registration={
           selectedRegistration
         }
@@ -460,10 +475,11 @@ const Registrations = () => {
       <DeleteModal
         show={showDeleteModal}
         title="Delete Program"
-        message={`Are you sure you want to delete "${selectedRegistration?.name}"?`}
-        onClose={() =>
-          setShowDeleteModal(false)
-        }
+        message={`Are you sure you want to delete registration for "${selectedRegistration?.user?.name}"?`}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setSelectedRegistration(null);
+        }}
         onConfirm={confirmDelete}
       />
     </div>

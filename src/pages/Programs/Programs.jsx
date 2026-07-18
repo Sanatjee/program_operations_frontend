@@ -314,7 +314,7 @@ const Programs = () => {
       </div>
       {/* Basic Bootstrap Table */}
       <div className="card">
-        <h5 className="card-header">Table Basic</h5>
+        <h5 className="card-header">Programs</h5>
         <div className="table-responsive text-nowrap">
           <table className="table">
             <thead>

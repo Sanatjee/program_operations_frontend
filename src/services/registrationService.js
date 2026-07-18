@@ -23,14 +23,14 @@ const update = (
   data
 ) => {
   return api.put(
-    `/registrations/${id}`,
+    `/register/learner/${id}`,
     data
   );
 };
 
 const destroy = (id) => {
   return api.delete(
-    `/registrations/${id}`
+    `/register/learner/${id}`
   );
 };
 

@@ -17,35 +17,26 @@ const RegistrationModal = ({
     phone: '',
     amount: '',
     reference_no: '',
+    payment_status: "pending",
     program_id: programId,
   };
 
-  const [form, setForm] =
-    useState(initialState);
+  const [form, setForm] = useState(initialState);
 
   useEffect(() => {
     if (registration) {
       setForm({
-        name:
-          registration.user?.name ||
-          '',
-        email:
-          registration.user?.email ||
-          '',
-        phone:
-          registration.user?.phone ||
-          '',
-        amount:
-          registration.amount || '',
-        reference_no: '',
-        program_id:
-          registration.program_id,
-      });
+        name: registration.user?.name || '',
+        email: registration.user?.email || '',
+        phone: registration.user?.phone || '',
+        amount: registration.amount || '', reference_no: '',
+        payment_status: registration.payment_status || "pending",
+        reference_no: "",
+        program_id: registration.program_id, });
     } else {
       setForm({
         ...initialState,
-        program_id:
-          programId || '',
+        program_id: programId || '',
       });
     }
   }, [registration, programId]);
@@ -87,17 +78,10 @@ const RegistrationModal = ({
                   : 'Register Learner'}
               </h5>
 
-              <button
-                className="btn-close"
-                onClick={onClose}
-              />
+              <button className="btn-close" onClick={onClose} />
             </div>
 
-            <form
-              onSubmit={
-                handleSubmit
-              }
-            >
+            <form onSubmit={ handleSubmit } >
               <div className="modal-body">
 
                 <div className="mb-3">
@@ -106,15 +90,10 @@ const RegistrationModal = ({
                   </label>
 
                   <input
-                    className={`form-control ${
-                      errors.name
-                        ? 'is-invalid'
-                        : ''
-                    }`}
+                    className={`form-control ${ errors.name ? 'is-invalid' : '' }`}
                     name="name"
-                    value={
-                      form.name
-                    }
+                    value={ form.name }
+                    disabled={!!registration}
                     onChange={
                       handleChange
                     }
@@ -135,15 +114,10 @@ const RegistrationModal = ({
                   </label>
 
                   <input
-                    className={`form-control ${
-                      errors.email
-                        ? 'is-invalid'
-                        : ''
-                    }`}
+                    className={`form-control ${ errors.email ? 'is-invalid' : '' }`}
                     name="email"
-                    value={
-                      form.email
-                    }
+                    value={ form.email }
+                    disabled={!!registration}
                     onChange={
                       handleChange
                     }
@@ -163,16 +137,10 @@ const RegistrationModal = ({
                     Phone
                   </label>
 
-                  <input
-                    className={`form-control ${
-                      errors.phone
-                        ? 'is-invalid'
-                        : ''
-                    }`}
+                  <input className={`form-control ${ errors.phone ? 'is-invalid' : '' }`}
                     name="phone"
-                    value={
-                      form.phone
-                    }
+                    value={ form.phone }
+                    disabled={!!registration}
                     onChange={
                       handleChange
                     }
@@ -189,20 +157,12 @@ const RegistrationModal = ({
 
                 <div className="mb-3">
                   <label className="form-label">
-                    Initial Payment
+                    {registration ? "Amount" : "Initial Amount"}
                   </label>
 
-                  <input
-                    type="number"
-                    className={`form-control ${
-                      errors.amount
-                        ? 'is-invalid'
-                        : ''
-                    }`}
+                  <input type="number" className={`form-control ${ errors.amount ? 'is-invalid' : '' }`}
                     name="amount"
-                    value={
-                      form.amount
-                    }
+                    value={ form.amount }
                     onChange={
                       handleChange
                     }
@@ -216,22 +176,16 @@ const RegistrationModal = ({
                     </div>
                   )}
                 </div>
-
+                
+                { !registration && 
                 <div className="mb-3">
                   <label className="form-label">
                     Reference No
                   </label>
 
-                  <input
-                    className={`form-control ${
-                      errors.reference_no
-                        ? 'is-invalid'
-                        : ''
-                    }`}
+                  <input className={`form-control ${ errors.reference_no ? 'is-invalid' : '' }`}
                     name="reference_no"
-                    value={
-                      form.reference_no
-                    }
+                    value={ form.reference_no }
                     onChange={
                       handleChange
                     }
@@ -245,6 +199,35 @@ const RegistrationModal = ({
                     </div>
                   )}
                 </div>
+                }
+
+                {registration && (
+                  <div className="mb-3">
+                    <label className="form-label">
+                      Payment Status
+                    </label>
+
+                    <select
+                      name="payment_status"
+                      className={`form-select ${
+                        errors.payment_status ? "is-invalid" : ""
+                      }`}
+                      value={form.payment_status}
+                      onChange={handleChange}
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="partial">Partial</option>
+                      <option value="paid">Paid</option>
+                    </select>
+
+                    {errors.payment_status && (
+                      <div className="invalid-feedback">
+                        {errors.payment_status[0]}
+                      </div>
+                    )}
+                  </div>
+                )}
+                
 
               </div>
 
