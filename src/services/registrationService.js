@@ -34,6 +34,8 @@ const destroy = (id) => {
   );
 };
 
+
+
 export default {
   getRegistrations,
   create,

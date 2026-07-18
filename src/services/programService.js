@@ -10,6 +10,10 @@ const create = (data) => {
   return api.post('/programs', data);
 };
 
+const show = (id, data) => {
+  return api.get(`/programs/${id}`, data);
+};
+
 const update = (id, data) => {
   return api.put(`/programs/${id}`, data);
 };
@@ -21,6 +25,7 @@ const destroy = (id) => {
 export default {
   getPrograms,
   create,
+  show,
   update,
   destroy,
 };

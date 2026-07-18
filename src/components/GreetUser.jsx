@@ -23,11 +23,6 @@ const GreetUser = () => {
               Have a productive day ahead.
             </p>
 
-            <button
-              className="btn btn-sm btn-outline-primary"
-            >
-              View Profile
-            </button>
           </div>
         </div>
 

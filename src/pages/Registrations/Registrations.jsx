@@ -7,8 +7,13 @@ import Toast from '../../components/Toast';
 import DeleteModal from '../../components/DeleteModal';
 import registrationService from '../../services/registrationService';
 import paymentService from '../../services/paymentService';
+import NoDataFound from '../../components/NoDataFound';
+import PaymentHistoryModal from '../../components/PaymentHistoryModal';
+import programService from '../../services/programService';
 
 const Registrations = () => {
+  const [program, setProgram] = useState(null);
+
   const [registrations, setRegistrations] = useState([]);
 
   const [pagination, setPagination] = useState({});
@@ -20,6 +25,10 @@ const Registrations = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const [showPaymentHistoryModal, setShowPaymentHistoryModal] = useState(false);
+
+  const [paymentHistory, setPaymentHistory] = useState([]);
 
   const [errors, setErrors] = useState({});
 
@@ -33,7 +42,7 @@ const Registrations = () => {
       program_id: searchParams.get(
         'program_id'
       ),
-    });  
+    });
 
 
   const [successMessage, setSuccessMessage] = useState('');
@@ -44,24 +53,34 @@ const Registrations = () => {
     type: 'success',
   });
 
-  const loadRegistrations = async () => {
-      try {
-        console.log("Registration called")
-        const response = await registrationService.getRegistrations(filters);
+  const loadProgram = async () => {
+    if (!filters.program_id) return;
 
-        setRegistrations(
-          response.data.data.data
-        );
+    const response = await programService.show(
+      filters.program_id
+    );
 
-        setPagination(
-          response.data.data
-        );
-      } catch (error) {
-        console.log(error);
-      }
+    setProgram(response.data.data);
   };
 
-  const saveRegistration = async ( data ) => {
+  const loadRegistrations = async () => {
+    try {
+      console.log("Registration called")
+      const response = await registrationService.getRegistrations(filters);
+
+      setRegistrations(
+        response.data.data.data
+      );
+
+      setPagination(
+        response.data.data
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const saveRegistration = async (data) => {
     try {
       setErrors({});
 
@@ -69,35 +88,35 @@ const Registrations = () => {
         selectedRegistration
       ) {
         await registrationService.update(
-        selectedRegistration.id,
-        {
-          amount: data.amount,
-          payment_status: data.payment_status,
-        }
-      );
+          selectedRegistration.id,
+          {
+            amount: data.amount,
+            payment_status: data.payment_status,
+          }
+        );
 
-      setToast({
-        show: true,
-        message: "Registration updated successfully.",
-        type: "success",
-      });
+        setToast({
+          show: true,
+          message: "Registration updated successfully.",
+          type: "success",
+        });
 
       } else {
         await registrationService.create(
           data
         );
         setToast({
-            show: true,
-            message:
-              'Registration created successfully.',
-            type: 'success',
+          show: true,
+          message:
+            'Registration created successfully.',
+          type: 'success',
         });
       }
       setShowRegistrationModal(false);
       setSelectedRegistration(null);
 
-      
-      
+
+
 
       loadRegistrations();
     } catch (error) {
@@ -109,10 +128,10 @@ const Registrations = () => {
             .errors
         );
       } else {
-        
+
         setToast({
           show: true,
-          message: error.response?.data ?.message ?? 'Something went wrong.',
+          message: error.response?.data?.message ?? 'Something went wrong.',
           type: 'danger',
         });
       }
@@ -120,37 +139,49 @@ const Registrations = () => {
   };
 
   const makePayment = async (data) => {
-      try {
-        console.log('Payment Data', data);
-        console.log('Selected Registration',selectedRegistration);
-        
-        const response = await paymentService.create(
-          selectedRegistration.id,
-          data
-        );
+    try {
+
+      const response = await paymentService.create(
+        selectedRegistration.id,
+        data
+      );
 
       console.log(response);
 
-        setShowPaymentModal(
-          false
+      setShowPaymentModal(
+        false
+      );
+
+      loadRegistrations();
+
+      setToast({
+        show: true,
+        message: 'Payment updated successfully.',
+        type: 'success',
+      });
+    } catch (error) {
+      if (
+        error.response?.status === 422
+      ) {
+        setErrors(
+          error.response.data.errors
         );
-
-        loadRegistrations();
-
-        setToast({
-          show: true,
-          message: 'Payment updated successfully.',
-          type: 'success',
-        });
-      } catch (error) {
-        if (
-          error.response?.status === 422
-        ) {
-          setErrors(
-            error.response.data.errors
-          );
-        }
       }
+    }
+  };
+
+  const loadPaymentHistory = async (registrationId) => {
+    try {
+
+      const response = await paymentService.history(registrationId);
+
+      setPaymentHistory(response.data.data);
+
+      setShowPaymentHistoryModal(true);
+
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const confirmDelete = async () => {
@@ -168,21 +199,22 @@ const Registrations = () => {
       );
 
       setToast({
-          show: true,
-          message: 'Registration deleted successfully.',
-          type: 'success',
+        show: true,
+        message: 'Registration deleted successfully.',
+        type: 'success',
       });
       loadRegistrations();
     } catch (error) {
       setToast({
         show: true,
-        message:error.response?.data ?.message ?? 'Failed to delete registration.',
+        message: error.response?.data?.message ?? 'Failed to delete registration.',
         type: 'danger',
       });
     }
   };
 
   useEffect(() => {
+    loadProgram();
     loadRegistrations();
     //auto hiding the toast
     if (toast.show) {
@@ -197,10 +229,58 @@ const Registrations = () => {
       return () =>
         clearTimeout(timer);
     }
-  }, [filters,toast.show]);
+  }, [filters, toast.show]);
 
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
+      {program && (
+        <div className="card mb-4">
+          <div className="card-header">
+            <h5>{program.name}</h5>
+          </div>
+
+          <div className="card-body">
+            <div className="row">
+
+              <div className="col-md-3">
+                <strong>Code</strong>
+                <p>{program.code}</p>
+              </div>
+
+              <div className="col-md-3">
+                <strong>Coordinator</strong>
+                <p>{program.coordinator}</p>
+              </div>
+
+              <div className="col-md-2">
+                <strong>Mode</strong>
+                <p>{program.mode}</p>
+              </div>
+
+              <div className="col-md-2">
+                <strong>Fee</strong>
+                <p>₹{program.fee}</p>
+              </div>
+
+              <div className="col-md-2">
+                <strong>Status</strong>
+                <p>{program.status}</p>
+              </div>
+
+              <div className="col-md-3">
+                <strong>Start Date</strong>
+                <p>{program.start_date}</p>
+              </div>
+
+              <div className="col-md-3">
+                <strong>End Date</strong>
+                <p>{program.end_date}</p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      )}
       <div className="card mb-4">
         <div className="card-body">
           <div className="row">
@@ -262,7 +342,10 @@ const Registrations = () => {
                   }
                 >
                   <i className="bx bx-plus"></i>
-                  Register Learner
+                  <span>
+                    Add Learner
+                  </span>
+
                 </button>
               </Permission>
             </div>
@@ -287,73 +370,53 @@ const Registrations = () => {
             </thead>
 
             <tbody>
-
-              {registrations.map(
-                (registration) => (
+              {registrations.length > 0 ? (
+                registrations.map((registration) => (
                   <tr key={registration.id}>
-                    <td>
-                      {
-                        registration.user
-                          ?.name
-                      }
-                    </td>
+                    <td>{registration.user?.name}</td>
 
-                    <td>
-                      {
-                        registration.user
-                          ?.email
-                      }
-                    </td>
+                    <td>{registration.user?.email}</td>
 
-                    <td>
-                      {
-                        registration.program
-                          ?.name
-                      }
-                    </td>
+                    <td>{registration.program?.name}</td>
 
-                    <td>
-                      ₹
-                      {
-                        registration.amount
-                      }
-                    </td>
+                    <td>₹{registration.amount}</td>
 
                     <td>
                       <span
-                        className={`badge ${
-                          registration.payment_status ===
-                          'paid'
-                            ? 'bg-label-success'
-                            : registration.payment_status ===
-                              'partial'
-                            ? 'bg-label-warning'
-                            : 'bg-label-danger'
-                        }`}
+                        className={`badge ${registration.payment_status === "paid"
+                          ? "bg-label-success"
+                          : registration.payment_status === "partial"
+                            ? "bg-label-warning"
+                            : "bg-label-danger"
+                          }`}
                       >
-                        {
-                          registration.payment_status
-                        }
+                        {registration.payment_status}
                       </span>
                     </td>
 
                     <td>
                       <div className="d-flex gap-2">
-
                         <Permission permission="payment.create">
                           <button
                             className="btn btn-sm btn-outline-success"
                             onClick={() => {
-                              setSelectedRegistration(
-                                registration
-                              );
-
-                              setShowPaymentModal(
-                                true
-                              );
+                              setSelectedRegistration(registration);
+                              setShowPaymentModal(true);
                             }}
                           >
                             <i className="bx bx-rupee"></i>
+                          </button>
+                        </Permission>
+
+                        <Permission permission="payment.view">
+                          <button
+                            className="btn btn-sm btn-outline-info"
+                            onClick={() => {
+                              setSelectedRegistration(registration);
+                              loadPaymentHistory(registration.id);
+                            }}
+                          >
+                            <i className="bx bx-history"></i>
                           </button>
                         </Permission>
 
@@ -381,67 +444,75 @@ const Registrations = () => {
                             <i className="bx bx-trash"></i>
                           </button>
                         </Permission>
-
                       </div>
                     </td>
                   </tr>
-                )
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="p-0">
+                    <NoDataFound
+                      title="No Registrations Found"
+                      message="No learners have been registered yet."
+                    />
+                  </td>
+                </tr>
               )}
-
             </tbody>
           </table>
         </div>
-        <div className="demo-inline-spacing">
-        {/* Basic Pagination */}
-        <nav>
-          <ul className="pagination justify-content-center">
-            {Array.from(
-              {
-                length:
-                  pagination.last_page || 1,
-              },
-              (_, i) => (
-                <li
-                  key={i}
-                  className={`page-item ${
-                    pagination.current_page ===
-                    i + 1
-                      ? 'active'
-                      : ''
-                  }`}
-                >
-                  <button
-                    className="page-link"
-                    onClick={() =>
-                      setFilters({
-                        ...filters,
-                        page: i + 1,
-                      })
-                    }
-                  >
-                    {i + 1}
-                  </button>
-                </li>
-              )
-            )}
-          </ul>
-        </nav>
-        {/*/ Basic Pagination */}
+        {registrations.length > 0 &&
+          <div className="demo-inline-spacing">
+            {/* Basic Pagination */}
+            <nav>
+              <ul className="pagination justify-content-center">
+                {Array.from(
+                  {
+                    length:
+                      pagination.last_page || 1,
+                  },
+                  (_, i) => (
+                    <li
+                      key={i}
+                      className={`page-item ${pagination.current_page ===
+                        i + 1
+                        ? 'active'
+                        : ''
+                        }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() =>
+                          setFilters({
+                            ...filters,
+                            page: i + 1,
+                          })
+                        }
+                      >
+                        {i + 1}
+                      </button>
+                    </li>
+                  )
+                )}
+              </ul>
+            </nav>
+            {/*/ Basic Pagination */}
 
-        {/* Success Message */}
-        <Toast
-          show={toast.show}
-          message={toast.message}
-          type={toast.type}
-          onClose={() =>
-            setToast((prev) => ({
-              ...prev,
-              show: false,
-            }))
-          }
-        />
-        {/* Success Message */}
-      </div>
+            {/* Success Message */}
+            <Toast
+              show={toast.show}
+              message={toast.message}
+              type={toast.type}
+              onClose={() =>
+                setToast((prev) => ({
+                  ...prev,
+                  show: false,
+                }))
+              }
+            />
+            {/* Success Message */}
+          </div>
+        }
 
 
       </div>
@@ -472,6 +543,16 @@ const Registrations = () => {
         onSubmit={makePayment}
       />
 
+      <PaymentHistoryModal
+        show={showPaymentHistoryModal}
+        registration={selectedRegistration}
+        payments={paymentHistory}
+        onClose={() => {
+          setShowPaymentHistoryModal(false);
+          setPaymentHistory([]);
+        }}
+      />
+
       <DeleteModal
         show={showDeleteModal}
         title="Delete Program"
@@ -482,6 +563,7 @@ const Registrations = () => {
         }}
         onConfirm={confirmDelete}
       />
+
     </div>
   )
 }

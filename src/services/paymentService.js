@@ -10,6 +10,13 @@ const create = (
   );
 };
 
+const history = (registrationId) => {
+    return api.get(
+        `/register/${registrationId}/payments`
+    );
+};
+
 export default {
   create,
+  history,
 };
