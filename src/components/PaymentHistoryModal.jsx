@@ -68,9 +68,9 @@ const PaymentHistoryModal = ({
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Date</th>
+                                            <th>Paid On</th>
                                             <th>Amount</th>
-                                            <th>Reference</th>
+                                            <th>Reference No</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
