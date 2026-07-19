@@ -300,37 +300,37 @@ const Programs = () => {
             </div>
 
             {/* From Date */}
-  <div className="col-md-2">
-    <input
-      type="date"
-      className="form-control"
-      value={filters.from_date}
-      onChange={(e) =>
-        setFilters({
-          ...filters,
-          from_date: e.target.value,
-          page: 1,
-        })
-      }
-    />
-  </div>
+            <div className="col-md-2">
+              <input
+                type="date"
+                className="form-control"
+                value={filters.from_date}
+                onChange={(e) =>
+                  setFilters({
+                    ...filters,
+                    from_date: e.target.value,
+                    page: 1,
+                  })
+                }
+              />
+            </div>
 
-  {/* To Date */}
-  <div className="col-md-2">
-    <input
-      type="date"
-      className="form-control"
-      value={filters.to_date}
-      min={filters.from_date}
-      onChange={(e) =>
-        setFilters({
-          ...filters,
-          to_date: e.target.value,
-          page: 1,
-        })
-      }
-    />
-  </div>
+            {/* To Date */}
+            <div className="col-md-2">
+              <input
+                type="date"
+                className="form-control"
+                value={filters.to_date}
+                min={filters.from_date}
+                onChange={(e) =>
+                  setFilters({
+                    ...filters,
+                    to_date: e.target.value,
+                    page: 1,
+                  })
+                }
+              />
+            </div>
 
             <div className="col-md-2">
               <Permission permission="program.create">
@@ -379,9 +379,9 @@ const Programs = () => {
                     <td>
                       <span
                         className={`badge ${program.status ===
-                            'active'
-                            ? 'bg-label-success'
-                            : 'bg-label-danger'
+                          'active'
+                          ? 'bg-label-success'
+                          : 'bg-label-danger'
                           }`}
                       >
                         {program.status}
@@ -453,9 +453,9 @@ const Programs = () => {
                     <li
                       key={i}
                       className={`page-item ${pagination.current_page ===
-                          i + 1
-                          ? 'active'
-                          : ''
+                        i + 1
+                        ? 'active'
+                        : ''
                         }`}
                     >
                       <button

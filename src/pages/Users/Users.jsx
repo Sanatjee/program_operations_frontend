@@ -4,6 +4,7 @@ import DeleteModal from "../../components/DeleteModal";
 import Permission from "../../components/Permission";
 import Toast from "../../components/Toast";
 import userService from "../../services/userService";
+import NoDataFound from "../../components/NoDataFound";
 
 const Users = () => {
 
@@ -20,10 +21,10 @@ const Users = () => {
     const [errors, setErrors] = useState({});
 
     const [filters, setFilters] = useState({
-      search: "",
-      role: "",
-      is_active: "",
-      page: 1,
+        search: "",
+        role: "",
+        is_active: "",
+        page: 1,
     });
 
     const [toast, setToast] = useState({
@@ -169,63 +170,63 @@ const Users = () => {
 
                         </div>
 
-                       {/* Role Filter */}
+                        {/* Role Filter */}
 
                         <div className="col-md-3">
-                          <select
-                            className="form-select"
-                            value={filters.role}
-                            onChange={(e) =>
-                              setFilters({
-                                ...filters,
-                                role: e.target.value,
-                                page: 1,
-                              })
-                            }
-                          >
-                            <option value="">
-                              All Roles
-                            </option>
+                            <select
+                                className="form-select"
+                                value={filters.role}
+                                onChange={(e) =>
+                                    setFilters({
+                                        ...filters,
+                                        role: e.target.value,
+                                        page: 1,
+                                    })
+                                }
+                            >
+                                <option value="">
+                                    All Roles
+                                </option>
 
-                            <option value="Admin">
-                              Admin
-                            </option>
+                                <option value="Admin">
+                                    Admin
+                                </option>
 
-                            <option value="Program Manager">
-                              Program Manager
-                            </option>
+                                <option value="Program Manager">
+                                    Program Manager
+                                </option>
 
-                            <option value="Operations User">
-                              Operations User
-                            </option>
-                          </select>
+                                <option value="Operations User">
+                                    Operations User
+                                </option>
+                            </select>
                         </div>
 
                         {/* Status Filter */}
                         <div className="col-md-3">
-                          <select
-                            className="form-select"
-                            value={filters.is_active}
-                            onChange={(e) =>
-                              setFilters({
-                                ...filters,
-                                is_active: e.target.value,
-                                page: 1,
-                              })
-                            }
-                          >
-                            <option value="">
-                              All Status
-                            </option>
+                            <select
+                                className="form-select"
+                                value={filters.is_active}
+                                onChange={(e) =>
+                                    setFilters({
+                                        ...filters,
+                                        is_active: e.target.value,
+                                        page: 1,
+                                    })
+                                }
+                            >
+                                <option value="">
+                                    All Status
+                                </option>
 
-                            <option value="1">
-                              Active
-                            </option>
+                                <option value="1">
+                                    Active
+                                </option>
 
-                            <option value="0">
-                              Inactive
-                            </option>
-                          </select>
+                                <option value="0">
+                                    Inactive
+                                </option>
+                            </select>
                         </div>
 
                         <div className="col-md-2">
@@ -270,58 +271,69 @@ const Users = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {users.map(user => (
-                                <tr key={user.id}>
-                                    <td>{user.name}</td>
-                                    <td>{user.email}</td>
-                                    <td>{user.phone}</td>
-                                    <td> {user.roles?.length ? user.roles[0].name : "-"} </td>
-                                    <td>
-                                        <span className={`badge ${ user.is_active ? "bg-label-success" : "bg-label-danger" }`} >
-                                            {user.is_active
-                                                ? "Active"
-                                                : "Inactive"}
-                                        </span>
+                            {users.length > 0 ? (
+                                users.map(user => (
+                                    <tr key={user.id}>
+                                        <td>{user.name}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.phone}</td>
+                                        <td> {user.roles?.length ? user.roles[0].name : "-"} </td>
+                                        <td>
+                                            <span className={`badge ${user.is_active ? "bg-label-success" : "bg-label-danger"}`} >
+                                                {user.is_active
+                                                    ? "Active"
+                                                    : "Inactive"}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div className="d-flex gap-2">
+
+                                                <Permission permission="user.edit">
+
+                                                    <button
+                                                        className="btn btn-sm btn-outline-primary"
+                                                        onClick={() => {
+                                                            setErrors({});
+                                                            setSelectedUser(user);
+                                                            setShowUserModal(true);
+                                                        }}
+                                                    >
+                                                        <i className="bx bx-edit"></i>
+                                                    </button>
+
+                                                </Permission>
+
+                                                <Permission permission="user.delete">
+
+                                                    <button
+                                                        className="btn btn-sm btn-outline-danger"
+                                                        onClick={() => {
+                                                            setSelectedUser(user);
+                                                            setShowDeleteModal(true);
+                                                        }}
+                                                    >
+                                                        <i className="bx bx-trash"></i>
+                                                    </button>
+
+                                                </Permission>
+
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="8" className="p-0">
+                                        <NoDataFound
+                                            title="No User Found"
+
+                                        />
                                     </td>
-                                    <td>
-                                    <div className="d-flex gap-2">
-
-                                        <Permission permission="user.edit">
-
-                                            <button
-                                                className="btn btn-sm btn-outline-primary"
-                                                onClick={() => {
-                                                    setErrors({});
-                                                    setSelectedUser(user);
-                                                    setShowUserModal(true);
-                                                }}
-                                            >
-                                                <i className="bx bx-edit"></i>
-                                            </button>
-
-                                        </Permission>
-
-                                        <Permission permission="user.delete">
-
-                                            <button
-                                                className="btn btn-sm btn-outline-danger"
-                                                onClick={() => {
-                                                    setSelectedUser(user);
-                                                    setShowDeleteModal(true);
-                                                }}
-                                            >
-                                                <i className="bx bx-trash"></i>
-                                            </button>
-
-                                        </Permission>
-
-                                    </div>
-
-                                    </td>
-
                                 </tr>
-
-                            ))}
+                            )}
 
                         </tbody>
 
@@ -339,11 +351,10 @@ const Users = () => {
 
                                 <li
                                     key={i}
-                                    className={`page-item ${
-                                        pagination.current_page === i + 1
+                                    className={`page-item ${pagination.current_page === i + 1
                                             ? "active"
                                             : ""
-                                    }`}
+                                        }`}
                                 >
 
                                     <button

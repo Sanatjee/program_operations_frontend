@@ -9,6 +9,8 @@ import ProgramRegistrationChart from '../../components/ProgramRegistrationChart 
 import MonthlyRevenueChart from '../../components/MonthlyRevenueChart'
 import PaymentStatusChart from '../../components/PaymentStatusChart'
 import UpcomingProgramsTable from '../../components/UpcomingProgramsTable'
+import Permission from '../../components/Permission'
+import TopPerformingProgramsTable from '../../components/TopPerformingProgramsTable'
 
 const DashBoard = () => {
   const [metrics, setMetrics] = useState({});
@@ -39,65 +41,74 @@ const DashBoard = () => {
         </div>
 
       </div>
-      <div className="row">
-        {/* Statistics */}
-        {
-          dashboardStats.map((stats) => {
-            return <StatsCard
-              key={stats.res_key}
-              title={stats.title}
-              symbol={stats?.symbol}
-              metric={metrics[stats.res_key] ?? 0}
-              loading={loading}
-            />
-          })
-        }
+      <Permission permission="dashboard.metrics">
+        <div className="row">
+          {/* Statistics */}
+          {
+            dashboardStats.map((stats) => {
+              return <StatsCard
+                key={stats.res_key}
+                title={stats.title}
+                symbol={stats?.symbol}
+                metric={metrics[stats.res_key] ?? 0}
+                loading={loading}
+              />
+            })
+          }
 
-        {/*/ Statistics */}
-      </div>
-      <div className="row mt-4">
-
-        <div className="col-lg-6 mb-4">
-          <ProgramRegistrationChart
-            data={metrics.program_wise_registrations ?? []}
-          />
-
-        </div>
-
-        <div className="col-lg-6 mb-4">
-          <MonthlyRevenueChart
-            data={metrics.monthly_revenue_collection ?? []}
-          />
-
-
-        </div>
-        <div className="row mt-4">
-          <div className="col-lg-6 mb-4">
-            <MonthlyRegistrationChart
-              data={metrics.monthly_registrations ?? []}
-            />
-          </div>
-
-          <div className="col-lg-6 mb-4">
-            <PaymentStatusChart
-              data={
-                metrics.payment_status_distribution ?? {}
-              }
-            />
-          </div>
+          {/*/ Statistics */}
         </div>
         <div className="row mt-4">
 
-          <div className="col-12">
-
-            <UpcomingProgramsTable
-              programs={metrics.upcoming_programs || []}
+          <div className="col-lg-6 mb-4">
+            <ProgramRegistrationChart
+              data={metrics.program_wise_registrations ?? []}
             />
 
           </div>
 
+          <div className="col-lg-6 mb-4">
+            <MonthlyRevenueChart
+              data={metrics.monthly_revenue_collection ?? []}
+            />
+
+
+          </div>
+          <div className="row mt-4">
+            <div className="col-lg-6 mb-4">
+              <MonthlyRegistrationChart
+                data={metrics.monthly_registrations ?? []}
+              />
+            </div>
+
+            <div className="col-lg-6 mb-4">
+              <PaymentStatusChart
+                data={
+                  metrics.payment_status_distribution ?? {}
+                }
+              />
+            </div>
+          </div>
+          <div className="row mt-4">
+
+            <div className="col-12 mb-4">
+
+              <UpcomingProgramsTable
+                programs={metrics.upcoming_programs || []}
+              />
+
+            </div>
+            <div className="col-12 mb-4">
+
+              <TopPerformingProgramsTable
+                programs={metrics.top_performing_programs || []}
+              />
+
+            </div>
+
+          </div>
         </div>
-      </div>
+      </Permission>
     </div>
   )
 }

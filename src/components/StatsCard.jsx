@@ -1,28 +1,36 @@
-import React from 'react'
+import React from 'react';
 
-const StatsCard = ({title,metric,symbol}) => {
-  
+const StatsCard = ({ title, metric, symbol }) => {
   return (
-    <div className="col-md-6 col-lg-4 col-xl-4 order-0 mb-6">
-        <div className="card h-100">
-            <div className="card-header d-flex justify-content-between">
-                <div className="card-title mb-0">
-                <h5 className="mb-1 me-2">{title}</h5>
-                
-                </div>
-                
-            </div>
-            <div className="card-body">
-                <div className="d-flex justify-content-between align-items-center mb-6">
-                <div className="d-flex flex-column align-items-center gap-1">
-                    <h3 className="mb-1">{symbol} {metric}</h3>
-                </div>
-                <div id="orderStatisticsChart" />
-                </div>
-            </div>
-        </div>
-    </div>
-  )
-}
+    <div className="col-12 col-sm-6 col-lg-3 mb-4">
+      <div className="card h-100 shadow-sm">
+        <div className="card-body py-3 px-3">
+          <div className="d-flex justify-content-between align-items-center">
+            <div>
+              <small className="text-muted d-block mb-1">
+                {title}
+              </small>
 
-export default StatsCard
+              <h4 className="mb-0 fw-bold">
+                {symbol} {metric}
+              </h4>
+            </div>
+
+            <div
+              className="rounded-circle bg-label-primary d-flex align-items-center justify-content-center"
+              style={{
+                width: "42px",
+                height: "42px",
+                fontSize: "20px",
+              }}
+            >
+              📊
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default StatsCard;
