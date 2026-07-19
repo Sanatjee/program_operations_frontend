@@ -77,7 +77,7 @@ const MonthlyRevenueChart = ({ data = [] }) => {
     return (
          <div className="card">
             <div className="card-header">
-                <h5 className="mb-0">Monthly Revenue</h5>
+                <h5 className="mb-0">Revenue Collection (Monthly)</h5>
             </div>
 
             <div

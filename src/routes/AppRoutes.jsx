@@ -9,6 +9,7 @@ import Payments from '../pages/Payments/Payments';
 
 import DashboardLayout from '../layouts/DashboardLayout';
 import ProtectedRoute from './ProtectedRoute';
+import RolePermissionPage from '../pages/RBAC/RolePermissionPage';
 
 function AppRoutes() {
   return (
@@ -42,6 +43,11 @@ function AppRoutes() {
           <Route
             path="/payments"
             element={<Payments />}
+          />
+
+          <Route
+            path="/roles-and-permissions"
+            element={<RolePermissionPage />}
           />
         </Route>
       </Route>

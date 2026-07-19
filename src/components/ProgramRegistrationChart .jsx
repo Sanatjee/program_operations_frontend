@@ -73,7 +73,6 @@ const ProgramRegistrationChart = ({ data = [] }) => {
 
             title: {
                 display: true,
-                text: "Program-wise Registrations",
                 font: {
                     size: 18,
                 },

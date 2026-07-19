@@ -12,7 +12,7 @@ const dashboardStats = [
     res_key: 'pending_payments',
   },
   {
-    title: 'Revenue Collection',
+    title: 'Total Collection',
     res_key: 'revenue_collection',
     symbol: '₹'
   },

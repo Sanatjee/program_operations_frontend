@@ -90,21 +90,22 @@ const DashBoard = () => {
             </div>
           </div>
           <div className="row mt-4">
-
-            <div className="col-12 mb-4">
-
-              <UpcomingProgramsTable
-                programs={metrics.upcoming_programs || []}
-              />
-
-            </div>
-            <div className="col-12 mb-4">
+            <div className="col-6 mb-4">
 
               <TopPerformingProgramsTable
                 programs={metrics.top_performing_programs || []}
               />
 
             </div>
+
+            <div className="col-6 mb-4">
+
+              <UpcomingProgramsTable
+                programs={metrics.upcoming_programs || []}
+              />
+
+            </div>
+            
 
           </div>
         </div>

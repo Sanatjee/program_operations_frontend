@@ -2,7 +2,7 @@ import React from "react";
 
 const UpcomingProgramsTable = ({ programs = [] }) => {
     return (
-        <div className="card mt-4">
+        <div className="card">
 
             <div className="card-header">
                 <h5 className="mb-0">
@@ -18,11 +18,13 @@ const UpcomingProgramsTable = ({ programs = [] }) => {
 
                         <tr>
                             <th>Program</th>
-                            <th>Code</th>
+                            
                             <th>Mode</th>
-                            <th>Coordinator</th>
+                            
                             <th>Start Date</th>
-                            <th>Fee</th>
+
+                            <th>End Date</th>
+                        
                         </tr>
 
                     </thead>
@@ -37,11 +39,9 @@ const UpcomingProgramsTable = ({ programs = [] }) => {
 
                                     <td>{program.name}</td>
 
-                                    <td>{program.code}</td>
 
                                     <td>{program.mode}</td>
 
-                                    <td>{program.coordinator}</td>
 
                                     <td>
                                         {new Date(
@@ -50,7 +50,9 @@ const UpcomingProgramsTable = ({ programs = [] }) => {
                                     </td>
 
                                     <td>
-                                        ₹{Number(program.fee).toLocaleString()}
+                                        {new Date(
+                                            program.end_date
+                                        ).toLocaleDateString()}
                                     </td>
 
                                 </tr>

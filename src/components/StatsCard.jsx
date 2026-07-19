@@ -12,7 +12,8 @@ const StatsCard = ({ title, metric, symbol }) => {
               </small>
 
               <h4 className="mb-0 fw-bold">
-                {symbol} {metric}
+                {symbol} { Number(metric).toLocaleString("en-IN")}
+                
               </h4>
             </div>
 

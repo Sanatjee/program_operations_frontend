@@ -72,7 +72,7 @@ const MonthlyRegistrationChart = ({ data = [] }) => {
     return (
         <div className="card">
             <div className="card-header">
-                <h5 className="mb-0">Monthly Registrations</h5>
+                <h5 className="mb-0">Registration Trend (Monthly)</h5>
             </div>
 
             <div

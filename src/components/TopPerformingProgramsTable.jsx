@@ -5,7 +5,7 @@ const TopPerformingProgramsTable = ({ programs = [] }) => {
         <div className="card">
             <div className="card-header">
                 <h5 className="mb-0">
-                    Top Performing Programs (By Revenue)
+                    Top 10 Performing Programs (Expected Revenue)
                 </h5>
             </div>
 
@@ -15,10 +15,10 @@ const TopPerformingProgramsTable = ({ programs = [] }) => {
                         <tr>
                             <th>#</th>
                             <th>Program</th>
-                            <th>Registrations</th>
                             <th className="text-end">
                                 Revenue
                             </th>
+                            <th>Registrations</th>
                         </tr>
                     </thead>
 
@@ -35,15 +35,13 @@ const TopPerformingProgramsTable = ({ programs = [] }) => {
 
                                     <td>{program.name}</td>
 
+                                    <td className="text-end fw-semibold text-success">
+                                        ₹ {Number(
+                                            program.expected_revenue
+                                        ).toLocaleString("en-IN")}
+                                    </td>
                                     <td>
                                         {program.registrations_count}
-                                    </td>
-
-                                    <td className="text-end fw-semibold text-success">
-                                        ₹
-                                        {Number(
-                                            program.registrations_sum_amount
-                                        ).toLocaleString("en-IN")}
                                     </td>
                                 </tr>
                             ))
