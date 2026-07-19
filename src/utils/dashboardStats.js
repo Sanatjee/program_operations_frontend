@@ -10,6 +10,7 @@ const dashboardStats = [
   {
     title: 'Pending Payments',
     res_key: 'pending_payments',
+    symbol: '₹'
   },
   {
     title: 'Total Collection',

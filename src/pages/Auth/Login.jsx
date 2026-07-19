@@ -60,7 +60,7 @@ const Login = () => {
               </h4>
 
               <p className="">
-                IIT Bombay
+                Educational Outreach | IIT Bombay
               </p>
 
 
