@@ -56,12 +56,17 @@ const Login = () => {
           <div className="card px-sm-6 px-0">
             <div className="card-body">
               <h4 className="mb-1">
-                Welcome to POD!
+                Welcome to Educational Outreach Portal!
               </h4>
 
-              <p className="mb-6">
-                Please sign in to your account
+              <p className="">
+                IIT Bombay
               </p>
+
+
+              {/* <p className="mb-6">
+                Please sign in to your account
+              </p> */}
 
               {error && (
                 <div className="alert alert-danger">
