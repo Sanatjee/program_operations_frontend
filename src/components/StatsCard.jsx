@@ -1,6 +1,6 @@
 import React from 'react'
 
-const StatsCard = ({title,metric}) => {
+const StatsCard = ({title,metric,symbol}) => {
   
   return (
     <div className="col-md-6 col-lg-4 col-xl-4 order-0 mb-6">
@@ -15,7 +15,7 @@ const StatsCard = ({title,metric}) => {
             <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center mb-6">
                 <div className="d-flex flex-column align-items-center gap-1">
-                    <h3 className="mb-1">{metric}</h3>
+                    <h3 className="mb-1">{symbol} {metric}</h3>
                 </div>
                 <div id="orderStatisticsChart" />
                 </div>

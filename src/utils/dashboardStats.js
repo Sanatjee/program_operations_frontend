@@ -11,6 +11,11 @@ const dashboardStats = [
     title: 'Pending Payments',
     res_key: 'pending_payments',
   },
+  {
+    title: 'Revenue Collection',
+    res_key: 'revenue_collection',
+    symbol: '₹'
+  },
 ];
 
 export default dashboardStats;

@@ -362,7 +362,6 @@ const Registrations = () => {
               <tr>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Program</th>
                 <th>Amount</th>
                 <th>Payment</th>
                 <th>Actions</th>
@@ -376,8 +375,6 @@ const Registrations = () => {
                     <td>{registration.user?.name}</td>
 
                     <td>{registration.user?.email}</td>
-
-                    <td>{registration.program?.name}</td>
 
                     <td>₹{registration.amount}</td>
 
